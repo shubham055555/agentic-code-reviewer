@@ -4,18 +4,19 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 BASE_URL = "https://api.github.com"
 
 
 def get_headers():
-    if not GITHUB_TOKEN:
+    github_token = os.getenv("GITHUB_TOKEN")
+
+    if not github_token:
         raise RuntimeError(
             "GITHUB_TOKEN is required for GitHub API requests."
         )
 
     return {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Authorization": f"Bearer {github_token}",
         "Accept": "application/vnd.github+json",
     }
 
@@ -64,6 +65,8 @@ def post_pull_request_comment(owner, repo, pull_number, body):
 
     response.raise_for_status()
     return response.json()
+
+
 def find_existing_review_comment(owner, repo, pull_number):
     url = (
         f"{BASE_URL}/repos/{owner}/{repo}"
@@ -82,7 +85,7 @@ def find_existing_review_comment(owner, repo, pull_number):
     for comment in response.json():
         body = comment.get("body", "")
 
-        if body.startswith("## 🤖 Agentic Code Review"):
+        if body.startswith("## Agentic Code Review"):
             return comment
 
     return None
@@ -119,3 +122,4 @@ def upsert_pull_request_comment(owner, repo, pull_number, body):
         pull_number,
         body,
     )
+
