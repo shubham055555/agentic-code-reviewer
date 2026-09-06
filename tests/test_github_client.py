@@ -3,7 +3,9 @@
 from github.client import upsert_pull_request_comment
 
 
-def test_updates_existing_review_comment():
+def test_updates_existing_review_comment(monkeypatch):
+
+    monkeypatch.setenv("GITHUB_TOKEN", "test-token")
 
     existing_comment = {
         "id": 12345,
@@ -38,7 +40,9 @@ def test_updates_existing_review_comment():
     assert result["id"] == 12345
 
 
-def test_creates_comment_when_no_existing_review():
+def test_creates_comment_when_no_existing_review(monkeypatch):
+
+    monkeypatch.setenv("GITHUB_TOKEN", "test-token")
 
     with patch(
         "github.client.find_existing_review_comment",
