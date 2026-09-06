@@ -1,14 +1,15 @@
-from schemas.review import ReviewFinding
+from github.client import get_pull_request_diff
 
 
-finding = ReviewFinding(
-    severity="HIGH",
-    category="security",
-    file="app/db.py",
-    line=42,
-    issue="Potential SQL injection",
-    explanation="User input is directly used in a SQL query.",
-    suggested_fix="Use parameterized queries."
+OWNER = "octocat"
+REPO = "Hello-World"
+PR_NUMBER = 1
+
+
+diff = get_pull_request_diff(
+    OWNER,
+    REPO,
+    PR_NUMBER
 )
 
-print(finding.model_dump_json(indent=2))
+print(diff)

@@ -1,5 +1,5 @@
 import subprocess
-from pathlib import Path
+import re
 
 
 def get_diff():
@@ -16,6 +16,7 @@ def get_diff():
 def parse_diff(diff):
     changes = []
     current_file = None
+    current_line = None
 
     for line in diff.splitlines():
 
@@ -24,26 +25,23 @@ def parse_diff(diff):
             continue
 
         if line.startswith("@@"):
-            parts = line.split(" ")
+            match = re.search(r"\+(\d+)(?:,(\d+))?", line)
 
-            new_location = next(
-                part for part in parts if part.startswith("+")
-            )
-
-            line_number = int(
-                new_location.split(",")[0].replace("+", "")
-            )
-
-            changes.append({
-                "file": current_file,
-                "line": line_number
-            })
+            if match:
+                current_line = int(match.group(1))
 
             continue
 
         if line.startswith("+") and not line.startswith("+++"):
-            if current_file:
-                changes[-1]["code"] = line[1:]
+            if current_file and current_line is not None:
+
+                changes.append({
+                    "file": current_file,
+                    "line": current_line,
+                    "code": line[1:]
+                })
+
+                current_line += 1
 
     return changes
 
@@ -55,4 +53,8 @@ if __name__ == "__main__":
     print(diff)
 
     print("\n=== PARSED CHANGES ===")
-    print(parse_diff(diff))
+
+    changes = parse_diff(diff)
+
+    for change in changes:
+        print(change)
