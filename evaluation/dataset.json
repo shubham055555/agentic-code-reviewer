@@ -1,0 +1,137 @@
+[
+  {
+    "id": "sql-injection-001",
+    "file": "demo/app.py",
+    "line": 15,
+    "code": "query = \"UPDATE users SET email = '\" + email + \"' WHERE name = '\" + username + \"'\"",
+    "expected_category": "security",
+    "expected_severity": "CRITICAL",
+    "expected_issue_keywords": ["sql", "injection"]
+  },
+  {
+    "id": "sql-safe-001",
+    "file": "demo/app.py",
+    "line": 20,
+    "code": "conn.execute(\"SELECT * FROM users WHERE name = ?\", (username,))",
+    "expected_category": null,
+    "expected_severity": null,
+    "expected_issue_keywords": []
+  },
+  {
+    "id": "command-injection-001",
+    "file": "demo/utils.py",
+    "line": 12,
+    "code": "subprocess.run(command, shell=True)",
+    "expected_category": "security",
+    "expected_severity": "HIGH",
+    "expected_issue_keywords": ["command", "injection"]
+  },
+  {
+    "id": "command-safe-001",
+    "file": "demo/utils.py",
+    "line": 15,
+    "code": "subprocess.run([\"git\", \"status\"], check=True)",
+    "expected_category": null,
+    "expected_severity": null,
+    "expected_issue_keywords": []
+  },
+  {
+    "id": "secret-001",
+    "file": "demo/config.py",
+    "line": 5,
+    "code": "API_KEY = \"sk-example-secret-value\"",
+    "expected_category": "security",
+    "expected_severity": "HIGH",
+    "expected_issue_keywords": ["secret", "key"]
+  },
+  {
+    "id": "normal-string-001",
+    "file": "demo/app.py",
+    "line": 25,
+    "code": "message = \"Hello \" + username",
+    "expected_category": null,
+    "expected_severity": null,
+    "expected_issue_keywords": []
+  },
+  {
+    "id": "db-error-001",
+    "file": "demo/app.py",
+    "line": 30,
+    "code": "conn.execute(query)",
+    "expected_category": "error_handling",
+    "expected_severity": "MEDIUM",
+    "expected_issue_keywords": ["error", "exception", "database"]
+  },
+  {
+    "id": "file-error-001",
+    "file": "demo/files.py",
+    "line": 10,
+    "code": "data = open(path).read()",
+    "expected_category": "error_handling",
+    "expected_severity": "MEDIUM",
+    "expected_issue_keywords": ["error", "file", "exception"]
+  },
+  {
+    "id": "swallowed-error-001",
+    "file": "demo/service.py",
+    "line": 18,
+    "code": "except Exception: pass",
+    "expected_category": "error_handling",
+    "expected_severity": "MEDIUM",
+    "expected_issue_keywords": ["error", "exception"]
+  },
+  {
+    "id": "handled-error-001",
+    "file": "demo/service.py",
+    "line": 22,
+    "code": "try: conn.execute(query)\nexcept sqlite3.Error as exc: logger.error(exc)\nfinally: conn.close()",
+    "expected_category": null,
+    "expected_severity": null,
+    "expected_issue_keywords": []
+  },
+  {
+    "id": "new-function-test-001",
+    "file": "demo/users.py",
+    "line": 10,
+    "code": "def create_user(username, email):",
+    "expected_category": "testing",
+    "expected_severity": "MEDIUM",
+    "expected_issue_keywords": ["test"]
+  },
+  {
+    "id": "api-change-test-001",
+    "file": "demo/api.py",
+    "line": 40,
+    "code": "return create_user(request.json)",
+    "expected_category": "testing",
+    "expected_severity": "MEDIUM",
+    "expected_issue_keywords": ["test"]
+  },
+  {
+    "id": "simple-assignment-001",
+    "file": "demo/config.py",
+    "line": 8,
+    "code": "DEFAULT_TIMEOUT = 30",
+    "expected_category": null,
+    "expected_severity": null,
+    "expected_issue_keywords": []
+  },
+  {
+    "id": "edge-case-001",
+    "file": "demo/math.py",
+    "line": 12,
+    "code": "return total / count",
+    "expected_category": "testing",
+    "expected_severity": "LOW",
+    "expected_issue_keywords": ["test", "zero"]
+  },
+  {
+    "id": "safe-db-operation-001",
+    "file": "demo/app.py",
+    "line": 35,
+    "code": "with sqlite3.connect(\"users.db\") as conn: conn.execute(\"DELETE FROM users WHERE id = ?\", (user_id,))",
+    "expected_category": null,
+    "expected_severity": null,
+    "expected_issue_keywords": []
+  }
+]
