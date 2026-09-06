@@ -1,4 +1,4 @@
-﻿import os
+import os
 import time
 
 from dotenv import load_dotenv
@@ -9,7 +9,15 @@ from schemas.review import ReviewFinding
 
 load_dotenv()
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+def get_client():
+    api_key = os.getenv("GEMINI_API_KEY")
+
+    if not api_key:
+        raise RuntimeError(
+            "GEMINI_API_KEY is required to run the Testing Agent."
+        )
+
+    return genai.Client(api_key=api_key)
 
 
 def review_testing_changes(
@@ -54,6 +62,8 @@ Rules:
 
 Return a JSON array of ReviewFinding objects.
 """
+
+    client = get_client()
 
     for attempt in range(3):
         try:
